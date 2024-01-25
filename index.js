@@ -1,10 +1,14 @@
 import express from 'express';
 import recipesRouter from './routes/recipes.js';
+import cors from 'cors';
 
 const app = express();
 const port = 3000;
 
-app.use('/recipes', recipesRouter);
+app.use(cors()); // this is a middleware that allows requests from other origins
+app.use(express.urlencoded({ extended: true })); // this is a middleware that parses the body of the request
+
+app.use('/recipes', recipesRouter); // this links the recipesRouter to the /recipes path. it is a middleware
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
@@ -18,4 +22,4 @@ app.listen(port, () => {
 // 5. package.json: "type": "module"
 // 6. .env file
 // 7. .gitignore: node_modules and .env
-// 8. const router = express.Router();
+// 8. "type": "module" in package.json
