@@ -5,6 +5,7 @@ import cors from 'cors';
 const app = express();
 const port = 3000;
 
+app.use(express.json()); // this is a middleware that parses the body of the request
 app.use(cors()); // this is a middleware that allows requests from other origins
 app.use(express.urlencoded({ extended: true })); // this is a middleware that parses the body of the request
 

@@ -24,7 +24,6 @@ export const getRecipe = (req, res) => {
 
 export const postRecipe = (req, res) => {
   let { name, ingredients } = req.body;
-  ingredients = ingredients.split(",");
   console.log(`POST ${name}`);
   const newRecipe = { id: recipes.length + 1, name, ingredients };
   recipes.push(newRecipe);
