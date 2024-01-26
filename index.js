@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true })); // this is a middleware that pa
 app.use('/recipes', recipesRouter); // this links the recipesRouter to the /recipes path. it is a middleware
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Server listening on port ${port}`)
 })
 
 // How to create a Node.js server with Express.js
