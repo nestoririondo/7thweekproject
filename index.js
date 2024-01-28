@@ -1,40 +1,30 @@
-const http = require("node:http");
-const PORT = 8000;
-
-//Create the server
-const server = http.createServer((req, res) => {
-    console.log("Hello project 7th!");
-  if (req.url === "/") {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
+import express from 'express';
+import recipesRouter from './routes/recipes';
 
 
-    const data = {
-      message: "Hello from index",
-      timestamp: new Date().toISOString(),
-    };
+const app = express();
+const port = 3000;
 
-    const jsonData = JSON.stringify(data);
-    res.end(jsonData);
-  } else {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
+app.use('/recipes', cookbook)
 
-    const data = {
-      message: "404 not found",
-      timestamp: new Date().toISOString(),
-    };
-    const jsonData = JSON.stringify(data);
-    res.end(jsonData);
-  }
+app.get('/', (req, res) => {
+    res.send('GET request to the root')
 
-});
+})
 
-//Start the server
-server.listen(PORT, () => {
-  console.log(`Server listening port ${PORT}`);
-});
+//app.post('/', (req, res) => {
+    //res.send('POST request to the root')
+//})
 
-server.on("error", (error) => {
-    console.error(error);
-});
+//app.put('/', (req, res) => {
+    //res.send('PUT request to the root')
+//})
+
+//app.delete('/', (req, res) => {
+    //res.send('DELETE request to the root')
+//})
+
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
