@@ -12,19 +12,6 @@ app.get('/', (req, res) => {
 
 })
 
-//app.post('/', (req, res) => {
-    //res.send('POST request to the root')
-//})
-
-//app.put('/', (req, res) => {
-    //res.send('PUT request to the root')
-//})
-
-//app.delete('/', (req, res) => {
-    //res.send('DELETE request to the root')
-//})
-
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
