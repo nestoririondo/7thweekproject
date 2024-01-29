@@ -1,9 +1,9 @@
 import pool from "../db/pool.js";
 
 export const getRecipes = async (req, res) => {
-  const { search: searchTerm = "", skip = 0, limit = 100 } = req.query;
+  const { keyword = "", skip = 0, limit = 100 } = req.query;
   console.log(req.query)
-  console.log(`GET ${searchTerm}, ${skip}, ${limit}`);
+  console.log(`GET ${keyword}, ${skip}, ${limit}`);
   try {
     const text = `
     SELECT r.*
@@ -14,9 +14,9 @@ export const getRecipes = async (req, res) => {
     GROUP BY r.id
     OFFSET $2 LIMIT $3
   `;
-    const values = [`%${searchTerm}%`, skip, limit];
+    const values = [`%${keyword}%`, skip, limit];
     const { rows } = await pool.query(text, values);
-    console.log(`Get recipes: ${rows.length} skip: ${skip}, limit: ${limit}`);
+    console.log(`Sent recipes: ${rows.length} skip: ${skip}, limit: ${limit}`);
     res.json(rows);
   } catch (error) {
     console.error(error);
