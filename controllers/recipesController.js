@@ -1,49 +1,28 @@
-import pool from "../db.js";
-
-let recipes = [
-  {
-    id: 1,
-    name: "Pizza",
-    ingredients: ["dough", "tomato", "cheese"],
-    keywords: "italian, pizza, cheese",
-  },
-  {
-    id: 2,
-    name: "Hamburger",
-    ingredients: ["bun", "meat", "cheese"],
-    keywords: "american, hamburger, cheese",
-  },
-  {
-    id: 3,
-    name: "Hot Dog",
-    ingredients: ["bun", "sausage", "ketchup"],
-    keywords: "american, hot dog, ketchup",
-  },
-  {
-    id: 4,
-    name: "Lasagna",
-    ingredients: ["pasta", "tomato", "cheese"],
-    keywords: "italian, lasagna, cheese",
-  },
-  {
-    id: 5,
-    name: "Hot Salad",
-    ingredients: ["lettuce", "croutons", "parmesan"],
-    keywords: "italian, salad, cheese",
-  },
-];
+import pool from "../db/pool.js";
 
 export const getRecipes = async (req, res) => {
-  const { search: searchTerm = '', skip = 0, limit = 100 } = req.query;
+  const { search: searchTerm = "", skip = 0, limit = 100 } = req.query;
+  console.log(req.query)
   console.log(`GET ${searchTerm}, ${skip}, ${limit}`);
   try {
-    const text = 'SELECT * FROM recipes WHERE keywords LIKE $1 LIMIT $2 OFFSET $3';
-    const values = [`%${searchTerm}%`, limit, skip];
-    const results = await pool.query(text, values);
-    res.json(results.rows);
+    const text = `
+    SELECT r.*
+    FROM recipes r
+    INNER JOIN recipe_keywords rk ON r.id = rk.recipe_id
+    INNER JOIN keywords k ON rk.keyword_id = k.id
+    WHERE k.keyword LIKE $1
+    GROUP BY r.id
+    OFFSET $2 LIMIT $3
+  `;
+    const values = [`%${searchTerm}%`, skip, limit];
+    const { rows } = await pool.query(text, values);
+    console.log(`Get recipes: ${rows.length} skip: ${skip}, limit: ${limit}`);
+    res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while retrieving recipes' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving recipes" });
   }
 };
 
@@ -51,12 +30,15 @@ export const getRecipe = async (req, res) => {
   const { id } = req.params;
   console.log(`GET ${id}`);
   try {
-    const text = 'SELECT * FROM recipes WHERE id = $1';
+    const text = "SELECT * FROM recipes WHERE id = $1";
     const value = [id];
-    const results = await pool.query(text, value);
+    const { rows } = await pool.query(text, value);
+    res.json(rows[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while retrieving recipe' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving recipe" });
   }
 };
 

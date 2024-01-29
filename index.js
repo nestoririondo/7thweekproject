@@ -1,6 +1,7 @@
 import express from 'express';
 import recipesRouter from './routes/recipes.js';
 import cors from 'cors';
+import pool from './db/pool.js';
 
 const app = express();
 const port = 3000;
