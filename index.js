@@ -23,4 +23,5 @@ app.listen(port, () => {
 // 5. package.json: "type": "module"
 // 6. .env file
 // 7. .gitignore: node_modules and .env
-// 8. "type": "module" in package.json
+// 8. npm install cors
+// 9. npm install dotenv

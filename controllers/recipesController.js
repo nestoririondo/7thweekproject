@@ -1,3 +1,5 @@
+import pool from "../db.js";
+
 let recipes = [
   {
     id: 1,
@@ -31,26 +33,31 @@ let recipes = [
   },
 ];
 
-export const getRecipes = (req, res) => {
-  const searchTerm = req.query.search;
-  console.log(`GET /recipes ${searchTerm ? `?search=${searchTerm}` : ""}`);
-  if (!searchTerm) return res.send(recipes);
-  const filteredRecipes = recipes.filter((recipe) =>
-    recipe.keywords.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  if (filteredRecipes.length === 0)
-    return res
-      .status(404)
-      .json({ message: `No recipes found for ${searchTerm}` });
-  res.send(filteredRecipes);
+export const getRecipes = async (req, res) => {
+  const { search: searchTerm = '', skip = 0, limit = 100 } = req.query;
+  console.log(`GET ${searchTerm}, ${skip}, ${limit}`);
+  try {
+    const text = 'SELECT * FROM recipes WHERE keywords LIKE $1 LIMIT $2 OFFSET $3';
+    const values = [`%${searchTerm}%`, limit, skip];
+    const results = await pool.query(text, values);
+    res.json(results.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while retrieving recipes' });
+  }
 };
 
-export const getRecipe = (req, res) => {
+export const getRecipe = async (req, res) => {
   const { id } = req.params;
   console.log(`GET ${id}`);
-  const recipe = recipes.find((recipe) => recipe.id === Number(id));
-  if (recipe) return res.json(recipe);
-  res.status(200).json({ message: `No recipes found for ${searchTerm}` });
+  try {
+    const text = 'SELECT * FROM recipes WHERE id = $1';
+    const value = [id];
+    const results = await pool.query(text, value);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while retrieving recipe' });
+  }
 };
 
 export const postRecipe = (req, res) => {
