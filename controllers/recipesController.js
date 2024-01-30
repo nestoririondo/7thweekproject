@@ -1,9 +1,28 @@
 import pool from "../db/pool.js";
 
 export const getRecipes = async (req, res) => {
-  const { keyword = "", skip = 0, limit = 100 } = req.query;
-  console.log(req.query)
-  console.log(`GET ${keyword}, ${skip}, ${limit}`);
+  const { skip = 0, limit = 100 } = req.query;
+  try {
+    const text = `
+      SELECT *
+      FROM recipes
+      OFFSET $1 LIMIT $2
+    `;
+    const values = [skip, limit];
+    const { rows } = await pool.query(text, values);
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving recipes" });
+  }
+};
+
+export const searchRecipes = async (req, res) => {
+  const { keyword = "" } = req.query;
+  console.log(req.query);
+  console.log(`GET ${keyword}`);
   try {
     const text = `
     SELECT r.*
@@ -12,11 +31,10 @@ export const getRecipes = async (req, res) => {
     INNER JOIN keywords k ON rk.keyword_id = k.id
     WHERE k.keyword LIKE $1
     GROUP BY r.id
-    OFFSET $2 LIMIT $3
   `;
-    const values = [`%${keyword}%`, skip, limit];
+    const values = [`%${keyword}%`];
     const { rows } = await pool.query(text, values);
-    console.log(`Sent recipes: ${rows.length} skip: ${skip}, limit: ${limit}`);
+    console.log(`Sent recipes: ${rows.length}`);
     res.json(rows);
   } catch (error) {
     console.error(error);
