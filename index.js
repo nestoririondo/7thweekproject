@@ -1,11 +1,12 @@
 import express from 'express';
-import recipesRouter from './routes/recipes';
+import recipesRouter from './routes/recipes.js';  // import the recipesRouter
+
 
 
 const app = express();
-const port = 3000;
+const port = 8003;
 
-app.use('/recipes', cookbook)
+app.use('/recipes', recipesRouter);  // use the recipesRouter (which is imported from routes/recipes.js and contains all the routes for /recipes)
 
 app.get('/', (req, res) => {
     res.send('GET request to the root')
@@ -14,4 +15,4 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+}) 
