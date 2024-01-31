@@ -37,25 +37,16 @@ export const getRecipesByIngredient = async (req, res) => {
     }
 }
 
-export const updateRecipe = async (req, res) => {
-    try {
-        const id = req.params.id; // assuming the id is passed as a URL parameter
-        const recipe = req.body; // assuming the updated recipe data is passed in the request body
+//export const updateRecipe = async (req, res) => {
+ //   try {
+      //  const id = req.params.id; // assuming the id is passed as a URL parameter
+       // const recipe = req.body; // assuming the updated recipe data is passed in the request body
 
         // update the recipe in the database
-        const {rows} = await pool.query('UPDATE recipes SET name = $1, ingredients = $2, preparation_time = $3 WHERE id = $4 RETURNING *', [recipe.name, recipe.ingredients, recipe.preparation_time, id]);
+       // const {rows} = await pool.query('UPDATE recipes SET name = $1, ingredients = $2, preparation_time = $3 WHERE id = $4 RETURNING *', [recipe.name, //recipe.ingredients, recipe.preparation_time, id]);
 
-        res.status(200).json(rows[0]);
-    } catch (err) {
-        res.status(500).json({error: err});
-    }
-}
-
-export const getRecipesByPreparationTimeRange = async (req, res) => {
-    try {
-        const {rows} = await pool.query("SELECT * FROM recipes WHERE preparation_time BETWEEN $1 AND $2", [15, 45]); // assuming the preparation time range is passed as query parameters
-        res.status(200).json(rows); // return the recipes
-    } catch (err) {
-        res.status(500).json({error: err});
-    }
-}
+       // res.status(200).json(rows[0]);
+   // } catch (err) {
+        //res.status(500).json({error: err});
+    //}
+//}

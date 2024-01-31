@@ -5,10 +5,8 @@ const recipesRouter = express.Router();
 
 recipesRouter.get('/', getRecipes);
 recipesRouter.get('/', getRecipe);
-recipesRouter.get('/', updateRecipe);
-recipesRouter.get('/', getRecipesByIngredient);
-recipesRouter.get('/', getRecipesByPreparationTimeRange);
-
+//recipesRouter.get('/', updateRecipe);
+//recipesRouter.get('/', getRecipesByIngredient);
 
 
 export default recipesRouter;
