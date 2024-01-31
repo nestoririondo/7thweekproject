@@ -1,11 +1,13 @@
 import express from "express";
-import { getRecipes, searchRecipes, getRecipe, postRecipe } from "../controllers/recipesController.js";
+import { getRecipes, searchRecipes, getRecipe } from "../controllers/recipes.js";
+import { checkRecipe } from '../middlewares/recipes.js'
 
 const recipesRouter = express.Router();
 
 recipesRouter.get("/", getRecipes);
 recipesRouter.get("/search", searchRecipes);
-recipesRouter.get("/:id", getRecipe);
-recipesRouter.post("/new", postRecipe);
+recipesRouter.get("/:id", checkRecipe, getRecipe);
+// recipesRouter.post("/new", postRecipe);
+// recipesRouter.post('/vote', voteRecipe);
 
 export default recipesRouter;
