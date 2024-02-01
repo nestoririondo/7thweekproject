@@ -49,25 +49,23 @@ export const getRecipe = async (req, res) => {
   const { id } = req.params;
   console.log(`GET ${id}`);
   try {
-    let query = `
-    SELECT r.name, r.instructions, r.preparation_time, r.difficulty
+    const query = `
+    SELECT r.name, r.instructions, r.preparation_time, r.difficulty, i.name as ingredient_name, ri.amount
     FROM recipes r
+    JOIN recipe_ingredients ri ON ri.recipe_id = r.id
+    JOIN ingredients i ON i.id = ri.ingredient_id
     WHERE r.id = $1`;
     const value = [id];
-    let response1  = await pool.query(query, value);
-    console.log(response1.rows[0]);
+    const { rows } = await pool.query(query, value);
 
-    let query2 = `
-    SELECT i.name as ingredient_name, ri.amount
-    FROM ingredients i
-    JOIN recipe_ingredients ri ON i.id = ri.ingredient_id
-    JOIN recipes r ON r.id = ri.recipe_id
-    WHERE r.id = $1`;
-    const response2 = await pool.query(query2, value);
-    console.log(response2.rows);
-    response1.rows[0].ingredients = response2.rows;
+    const ingredients = rows.map((ingredient) => ({
+      ingredient_name: ingredient.ingredient_name,
+      amount: ingredient.amount,
+    }));
 
-    res.json(response1.rows[0]);
+    const recipe = {...rows[0], ingredients}
+    
+    res.json(recipe);
   } catch (error) {
     console.error(error);
     res

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express';
 import recipesRouter from './routes/recipes.js';
 import cors from 'cors';
@@ -5,11 +6,10 @@ import cors from 'cors';
 const app = express();
 const port = 3000;
 
-app.use(express.json()); // this is a middleware that parses the body of the request
-app.use(cors()); // this is a middleware that allows requests from other origins
-app.use(express.urlencoded({ extended: true })); // this is a middleware that parses the body of the request
+app.use(express.json());
+app.use(cors());
 
-app.use('/recipes', recipesRouter); // this links the recipesRouter to the /recipes path. it is a middleware
+app.use('/recipes', recipesRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`)
