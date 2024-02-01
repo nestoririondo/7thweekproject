@@ -4,8 +4,9 @@ export const getRecipes = async (req, res) => {
   const { skip = 0, limit = 100 } = req.query;
   try {
     const text = `
-      SELECT *
-      FROM recipes
+      SELECT r.*
+      FROM recipes r
+      ORDER BY r.date DESC
       OFFSET $1 LIMIT $2
     `;
     const values = [skip, limit];
@@ -13,10 +14,7 @@ export const getRecipes = async (req, res) => {
     res.json(rows);
     console.log(`Sent recipes: ${rows.length}`);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while retrieving recipes" });
+    res.sendStatus(500);
   }
 };
 
@@ -38,10 +36,7 @@ export const searchRecipes = async (req, res) => {
     console.log(`Sent recipes: ${rows.length}`);
     res.json(rows);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while retrieving recipes" });
+    res.sendStatus(500);
   }
 };
 
@@ -50,7 +45,7 @@ export const getRecipe = async (req, res) => {
   console.log(`GET ${id}`);
   try {
     const query = `
-    SELECT r.name, r.instructions, r.preparation_time, r.difficulty, i.name as ingredient_name, ri.amount
+    SELECT i.name as ingredient_name, ri.amount
     FROM recipes r
     JOIN recipe_ingredients ri ON ri.recipe_id = r.id
     JOIN ingredients i ON i.id = ri.ingredient_id
@@ -62,15 +57,12 @@ export const getRecipe = async (req, res) => {
       ingredient_name: ingredient.ingredient_name,
       amount: ingredient.amount,
     }));
-
-    const recipe = {...rows[0], ingredients}
+    const recipe = { ...req.recipe, ingredients };
+    console.log(req.recipe)
     
     res.json(recipe);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while retrieving recipe" });
+    res.sendStatus(500);
   }
 };
 
