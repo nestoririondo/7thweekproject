@@ -1,12 +1,13 @@
 import express from 'express';
-import recipesRouter from './routes/recipes.js';  // import the recipesRouter
+import recipesRouter from './routes/recipes.js';
+import 'dotenv/config'
 
 
 
 const app = express();
 const port = 8003;
-
-app.use('/recipes', recipesRouter);  // use the recipesRouter (which is imported from routes/recipes.js and contains all the routes for /recipes)
+app.use(express.json());
+app.use('/recipes', recipesRouter);
 
 app.get('/', (req, res) => {
     res.send('GET request to the root')

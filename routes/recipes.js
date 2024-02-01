@@ -1,12 +1,10 @@
 import express from 'express';
-import { getRecipes , getRecipe , updateRecipe , getRecipesByIngredient , getRecipesByPreparationTimeRange } from '../controllers/recipesController.js';
+import { getRecipes , getRecipe , searchRecipes } from '../controllers/recipesController.js';
 
 const recipesRouter = express.Router();
 
 recipesRouter.get('/', getRecipes);
-recipesRouter.get('/', getRecipe);
-//recipesRouter.get('/', updateRecipe);
-//recipesRouter.get('/', getRecipesByIngredient);
-
+recipesRouter.get('/:id', getRecipe);
+recipesRouter.get('/:search', searchRecipes);
 
 export default recipesRouter;
