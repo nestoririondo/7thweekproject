@@ -1,5 +1,5 @@
 import express from "express";
-import { getRecipes, searchRecipes, getRecipe } from "../controllers/recipes.js";
+import { getRecipes, searchRecipes, getRecipe, getImage } from "../controllers/recipes.js";
 import { checkRecipe } from '../middlewares/recipes.js'
 
 const recipesRouter = express.Router();

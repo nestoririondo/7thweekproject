@@ -9,6 +9,7 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
+app.use(express.static('public/recipes/'));
 app.use('/recipes', recipesRouter);
 
 app.listen(port, () => {
