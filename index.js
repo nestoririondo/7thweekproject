@@ -1,30 +1,27 @@
-console.log("Hello project 7th!");
+import 'dotenv/config'
+import express from 'express';
+import recipesRouter from './routes/recipes.js';
+import cors from 'cors';
 
-const http = require("node:http");
-const PORT = 8000;
+const app = express();
+const port = 3000;
 
-//Create the server
-const server = http.createServer((req, res) => {
-  if (req.url === "/") {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    const data = {
-      message: "Hello from index",
-    };
-    const jsonData = JSON.stringify(data);
-    res.end(jsonData);
-  } else {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    const data = {
-      message: "404 not found",
-    };
-    const jsonData = JSON.stringify(data);
-    res.end(jsonData);
-  }
-});
+app.use(express.json());
+app.use(cors());
 
-//Start the server
-server.listen(PORT, () => {
-  console.log(`Server listening port ${PORT}`);
-});
+app.use('/recipes', recipesRouter);
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`)
+})
+
+// How to create a Node.js server with Express.js
+// 1. npm init -y
+// 2. npm install express
+// 3. npm install nodemon --save-dev
+// 4. package.json: "dev": "nodemon index.js"
+// 5. package.json: "type": "module"
+// 6. .env file
+// 7. .gitignore: node_modules and .env
+// 8. npm install cors
+// 9. npm install dotenv
